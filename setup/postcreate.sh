@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-cf_uri=$(gcloud functions describe classifier_keyword_factory --format 'value(serviceConfig.uri)')
+cf_uri=$(gcloud functions describe classifier-keyword-factory --format 'value(serviceConfig.uri)')
 
 echo "Setting environment variable.." 
 gcloud run services update seatera --update-env-vars bucket_name=${GOOGLE_CLOUD_PROJECT}-keyword_factory cf_uri=$x --region=${GOOGLE_CLOUD_REGION}
