@@ -15,4 +15,4 @@
 cf_uri=$(gcloud functions describe classifier-keyword-factory --format 'value(serviceConfig.uri)')
 
 echo "Setting environment variable.." 
-gcloud run services update seatera --update-env-vars bucket_name=${GOOGLE_CLOUD_PROJECT}-keyword_factory,cf_uri=$x --region=${GOOGLE_CLOUD_REGION}
+gcloud run services update keyword-factory --update-env-vars bucket_name=${GOOGLE_CLOUD_PROJECT}-keyword_factory,cf_uri=$x --region=${GOOGLE_CLOUD_REGION}
