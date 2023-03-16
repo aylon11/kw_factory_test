@@ -20,6 +20,7 @@ echo "Setting environment variable.."
 gcloud run services update keyword-factory --update-env-vars bucket_name=${GOOGLE_CLOUD_PROJECT}-keyword_factory,cf_uri=$cf_uri --region=${GOOGLE_CLOUD_REGION}
 
 echo "Setting service account permissions"
-gcloud run services add-iam-policy-binding $cf_uri \
+gcloud run services add-iam-policy-binding'classifier-keyword-factory' \
   --member=$service_account \
-  --role='roles/run.invoker'
+  --role='roles/run.invoker' \
+  --region=${GOOGLE_CLOUD_REGION}

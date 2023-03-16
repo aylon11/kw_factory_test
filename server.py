@@ -75,7 +75,7 @@ def classify_keywords(kws) -> Dict[str, Dict[str, str]]:
     Returns: 
         a dict with the keyword as key - full categorization and confidence score """
    
-    req = urllib.request.Request(_CLASSIFIER_URL)
+    req = urllib.request.Request(_CLASSIFIER_URL, method="POST")
     auth_req = google.auth.transport.requests.Request()
     id_token = google.oauth2.id_token.fetch_id_token(auth_req, _CLASSIFIER_URL)
     req.add_header("Authorization", f"Bearer {id_token}")
