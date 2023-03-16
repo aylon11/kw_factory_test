@@ -13,6 +13,13 @@
 # limitations under the License.
 
 cf_uri=$(gcloud functions describe classifier-keyword-factory --format 'value(serviceConfig.uri)')
+project_number=$(gcloud projects describe ${GOOGLE_CLOUD_PROJECT} --format="value(projectNumber)")
+service_account="serviceAccount:${project_number}-compute@developer.gserviceaccount.com"
 
 echo "Setting environment variable.." 
 gcloud run services update keyword-factory --update-env-vars bucket_name=${GOOGLE_CLOUD_PROJECT}-keyword_factory,cf_uri=$cf_uri --region=${GOOGLE_CLOUD_REGION}
+
+echo "Setting service account permissions"
+gcloud run services add-iam-policy-binding $cf_uri \
+  --member=$service_account \
+  --role='roles/run.invoker'

@@ -19,9 +19,13 @@ from concurrent import futures
 from typing import List, Dict
 from google.ads.googleads.client import GoogleAdsClient
 from pathlib import Path
+import urllib
+import google.auth.transport.requests
+import google.oauth2.id_token
 import logging
 import requests
 import os
+import json
 
 _LOGS_PATH = Path('./server.log')
 _CLASSIFIER_URL = os.getenv('cf_uri')
@@ -70,8 +74,18 @@ def classify_keywords(kws) -> Dict[str, Dict[str, str]]:
         list of keywords to categorize
     Returns: 
         a dict with the keyword as key - full categorization and confidence score """
-    response = requests.post(_CLASSIFIER_URL, json={"kws": kws})
-    return response.json()
+   
+    req = urllib.request.Request(_CLASSIFIER_URL)
+    auth_req = google.auth.transport.requests.Request()
+    id_token = google.oauth2.id_token.fetch_id_token(auth_req, _CLASSIFIER_URL)
+    req.add_header("Authorization", f"Bearer {id_token}")
+    req.add_header('Content-Type', 'application/json')
+
+    data = json.dumps(kws)
+    data = data.encode()
+    response = urllib.request.urlopen(req,data=data)
+    print(response.read())
+    return response.read()
 
 
 def run(config: Config, accounts: List[str], run_type: str, uploaded_kws=[]):
