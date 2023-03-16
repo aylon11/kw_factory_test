@@ -81,7 +81,7 @@ def classify_keywords(kws) -> Dict[str, Dict[str, str]]:
     req.add_header("Authorization", f"Bearer {id_token}")
     req.add_header('Content-Type', 'application/json')
 
-    data = json.dumps(kws)
+    data = json.dumps({"kws":kws})
     data = data.encode()
     response = urllib.request.urlopen(req,data=data)
     print(response.read())
