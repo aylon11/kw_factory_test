@@ -74,7 +74,6 @@ def classify_keywords(kws) -> Dict[str, Dict[str, str]]:
         list of keywords to categorize
     Returns: 
         a dict with the keyword as key - full categorization and confidence score """
-   
     req = urllib.request.Request(_CLASSIFIER_URL, method="POST")
     auth_req = google.auth.transport.requests.Request()
     id_token = google.oauth2.id_token.fetch_id_token(auth_req, _CLASSIFIER_URL)
@@ -84,8 +83,8 @@ def classify_keywords(kws) -> Dict[str, Dict[str, str]]:
     data = json.dumps({"kws":kws})
     data = data.encode()
     response = urllib.request.urlopen(req,data=data)
-    print(response.read())
-    return response.read()
+    content = response.read().decode('utf-8')
+    return json.loads(content)
 
 
 def run(config: Config, accounts: List[str], run_type: str, uploaded_kws=[]):
@@ -114,7 +113,7 @@ def run(config: Config, accounts: List[str], run_type: str, uploaded_kws=[]):
         remove_keywords(client, kws, accounts)
         # Categorize
         classified_kws = classify_keywords(kws)
-        print(classify_keywords)
+        print(classified_kws)
         # Write to spreadsheet
         sheets_interactor.write_to_sheet(values=format_data_for_sheet(classified_kws))
     except Exception as e:
